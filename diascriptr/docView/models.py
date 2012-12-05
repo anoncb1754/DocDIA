@@ -7,8 +7,6 @@ class Transcriptions(models.Model):
 	date_created = models.DateTimeField()
 
 	def save(self):
-			
-		
 		super(Transcriptions, self).save()
 
 	def __unicode__(self):

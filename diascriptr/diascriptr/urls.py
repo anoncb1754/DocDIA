@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from docView import views
+from fileuploader import views as fview
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -7,6 +8,7 @@ from docView import views
 urlpatterns = patterns('',
 	(r'^docViewer/$', views.docViewer),
 	(r'^docViewer/confirmation/$', views.confirmation),
+	(r'^fileuploader/$', fview.fileuploader),
     # Examples:
     # url(r'^$', 'diascriptr.views.home', name='home'),
     # url(r'^diascriptr/', include('diascriptr.foo.urls')),

@@ -15,7 +15,7 @@ def docViewer(request):
 			dt = datetime.now()
 			tr = Transcriptions(content = ct, date_created=dt)
 			tr.save()
-
+			print 'Saved transcription to database!'
 			return HttpResponseRedirect('/docViewer/confirmation/')
 	else:
 		form = TranscriptrForm()
