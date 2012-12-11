@@ -1,6 +1,22 @@
 
+
 {% extends "base.html" %}
 
 {% block content %}
-<p> Hello {{ user }} That's the project overview...</p>
+<p> Hello {{ user }} that's the project overview:</p>
+<p>Create a new projec <a href="create_project"> here</a>!</p>
+<ul>
+    {% for project in project_list %}
+    <li>{{ project.project_name }} {{ project.project_description }} status: {{ project.visibility }}
+    {% empty %}
+    <p>You don't have any projects yet! Create one!</p>
+    {% endfor %}
+</ul>
+<p>Here are all the images</p>
+<ul>
+    {% for item in page_list %}
+    <li><img src={{ item.page }}></li>
+    {% empty %}
+    <p> There are no images!</p>
+    {% endfor %}
   {% endblock %}

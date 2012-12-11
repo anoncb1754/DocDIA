@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Create PROJECT</h1>
+<p> Hello {{ user }}, create your project here:</p>
+{% if form.errors %}
+<p>Please correct the error {{form.errors|pluralize }} below.</p>
+{% endif %}
+<form action="" enctype="multipart/form-data" method="POST">
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Create Project">
+</form>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-
+from django.contrib.auth.models import User
 # Create your models here.
 """
 class User(models.Model):
@@ -10,25 +10,27 @@ class User(models.Model):
     date_created = models.DateTimeField()
     ip_adress = models.IPAddressField()
 
-
+"""
 class Project(models.Model):
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(User)
+    project_name = models.CharField(max_length=40)
     project_description = models.CharField(max_length=200)
     date_created = models.DateTimeField()
     visibility = models.NullBooleanField()
 
     def __unicode__(self):
-        return self.project_description
-
+        return self.project_name
+def page_file_name(instance, filename):
+    return '/'.join(['page_docs', str(instance.project.id), filename])
 
 class Page(models.Model):
     date_created = models.DateTimeField()
     project = models.ForeignKey('Project')
-    
+    page = models.FileField(upload_to=page_file_name)#'page_docs/%Y/%m/%d')
 
     def __unicode__(self):
-        return self.date_created
-"""
+        return str(self.page)
+
 
 class Transcriptions(models.Model):
        # page = models.ForeignKey('Page')

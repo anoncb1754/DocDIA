@@ -15,6 +15,7 @@ urlpatterns = patterns('',
         (r'^accounts/login/$', login),
         (r'^accounts/logout/$', logout),
         (r'^accounts/profile/$', views.projects),
+        (r'^accounts/profile/create_project/$', views.create_project),
         # Examples:
     # url(r'^$', 'diascriptr.views.home', name='home'),
     # url(r'^diascriptr/', include('diascriptr.foo.urls')),
