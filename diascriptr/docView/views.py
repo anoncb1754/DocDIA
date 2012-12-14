@@ -7,6 +7,7 @@ from docView.models import Transcriptions, Project, Page
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+import itertools
 
 def docViewer(request):
 	if request.method == 'POST':
@@ -68,14 +69,23 @@ def projects(request):
     userid = request.user.id
     print request.user.email
     user = request.user
+    page_list = []
     theuser = request.user.username
     project_list = Project.objects.filter(user=user)
-    page_list = Page.objects.all()
-    print page_list
-    print 'THE PAGE LIST END'
-    print project_list
+
+    for project in project_list:
+        page_list.append(Page.objects.filter(project=project.id))
+        #page_list.append(project)
+    #now make a non nested list from page_list
+    flatted_list = [item for sub_list in page_list for item in sub_list]
+    print 'The flatted list is:', flatted_list
+    #Now combine the two lists
+    #iters = [iter(flatted_list), iter(project_list)]
+    #result_list =  list(it.next() for it in itertools.cycle(iters))
+    result_list = zip(flatted_list, project_list)
+    print 'The result list:', result_list
     return render_to_response('accounts/profile/project_overview.html', 
-            {'user': theuser, 'project_list': project_list, 'page_list': page_list})
+            {'user': theuser, 'result_list': result_list})
 
 
 @login_required

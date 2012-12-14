@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+
+
 # Create your models here.
 """
 class User(models.Model):
@@ -20,13 +22,18 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.project_name
+#Have to fix it here somehow, there is a problem with MEDIA_ROOT and page_docs
 def page_file_name(instance, filename):
-    return '/'.join(['page_docs', str(instance.project.id), filename])
+    file_n = '/'.join(['page_docs', str(instance.project.id), filename])
+    #file_n = '/'.join([str(instance.project.id), filename])
+    print 'THE FILE UPLOAD PATH', file_n
+    return file_n
 
 class Page(models.Model):
     date_created = models.DateTimeField()
     project = models.ForeignKey('Project')
-    page = models.FileField(upload_to=page_file_name)#'page_docs/%Y/%m/%d')
+    page = models.FileField(upload_to=page_file_name)
+    ##page_file_name)#'#page_docs/%Y/%m/%d')
 
     def __unicode__(self):
         return str(self.page)

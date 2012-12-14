@@ -5,6 +5,7 @@ from django.contrib.auth.views import login, logout
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+from django.conf import settings
 
 urlpatterns = patterns('',
 	(r'^docViewer/$', views.docViewer),
@@ -16,6 +17,14 @@ urlpatterns = patterns('',
         (r'^accounts/logout/$', logout),
         (r'^accounts/profile/$', views.projects),
         (r'^accounts/profile/create_project/$', views.create_project),
+
+
+
+
+
+
+#urlpatterns += patterns('',(r'^page_docs/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))
+        
         # Examples:
     # url(r'^$', 'diascriptr.views.home', name='home'),
     # url(r'^diascriptr/', include('diascriptr.foo.urls')),
@@ -26,3 +35,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
+if settings.DEBUG:
+        # static files (images, css, javascript, etc.)
+            urlpatterns += patterns('',
+                            (r'^page_docs/(?P<path>.*)$', 'django.views.static.serve', {
+                                        'document_root': settings.MEDIA_ROOT}))
