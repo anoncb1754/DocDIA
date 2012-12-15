@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'sorl.thumbnail',
     #'django.contrib.sites',
     #'django.contrib.messages',
     #'django.contrib.staticfiles',

@@ -8,6 +8,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import itertools
+import Image
 
 def docViewer(request):
 	if request.method == 'POST':
@@ -103,12 +104,14 @@ def create_project(request):
                     project_description=project_description,
                     visibility=visibility)
             project.save()
+            page = request.FILES['doc_1']
+            print 'THE REQUEST PAGE', page
             print 'Project saved to db...'
-            doc_1 = Page(page=request.FILES['doc_1'], date_created=date_created,
+            doc_1 = Page(page=page, date_created=date_created,
                     project=project)
             doc_1.save()
             print 'Doc saved to db...'
-
+            #create_thumb_from_page(page)
             #doc_2 = request.FILES['doc2']
             #print 'THE DOCS:', doc_1
             #project_list = Project.objects.filter(user=user)
@@ -118,3 +121,12 @@ def create_project(request):
         form = ProjectForm()
         print 'testcall3'
     return render_to_response("accounts/profile/create_project.html", {'form': form})
+"""
+def create_thumb_from_page(Page):
+    size = 160,160
+    print 'THE PAGE', Page
+    page = Image.open(Page)
+    im.thumbnail(size, Image.ANTIALIAS)
+    im.save('/Users/carlbednorz/Pictures/Placeholders/The_Image' + ".thumbnail", "JPEG")
+"""
+
