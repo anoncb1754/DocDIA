@@ -17,6 +17,8 @@ urlpatterns = patterns('',
         (r'^accounts/logout/$', logout),
         (r'^accounts/profile/$', views.projects),
         (r'^accounts/profile/create_project/$', views.create_project),
+        (r'^accounts/profile/transcription/$', views.transcript_project),
+	(r'^accounts/profile/upload/$', views.upload_docs),
 
 
 

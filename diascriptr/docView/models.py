@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
-
+from sorl.thumbnail import ImageField
 
 # Create your models here.
 """
@@ -32,15 +32,26 @@ def page_file_name(instance, filename):
 class Page(models.Model):
     date_created = models.DateTimeField()
     project = models.ForeignKey('Project')
-    page = models.FileField(upload_to=page_file_name)
+    page = models.ImageField(upload_to=page_file_name)
     ##page_file_name)#'#page_docs/%Y/%m/%d')
 
     def __unicode__(self):
         return str(self.page)
 
 
+class Transcription(models.Model):
+        page = models.ForeignKey('Page')
+	content = models.CharField(max_length=1000)
+	date_created = models.DateTimeField()
+
+
+
+
+	def __unicode__(self):
+		return self.content
+#TO BE DELETED!
 class Transcriptions(models.Model):
-       # page = models.ForeignKey('Page')
+        page = models.ForeignKey('Page')
 	content = models.CharField(max_length=1000)
 	date_created = models.DateTimeField()
 

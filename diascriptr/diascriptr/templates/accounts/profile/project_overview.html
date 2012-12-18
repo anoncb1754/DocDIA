@@ -12,13 +12,14 @@
     {% for item in result_list %}
     <tr>
         <td>
-            {% thumbnail item.page "100x100" crop="center" as im %}
+            {% thumbnail item.0.page "100x100" crop="center" as im %}
             <img src={{ MEDIA_ROOT }}/page_docs/{{ im.url }} width="{{ im.width }}" height="{{ im.height }}">
             {% endthumbnail %}
         </td>
         <td>{{ item.1.project_name }}</td>
         <td>{{ item.1.project_description }}</td>
         <td>{{ item.1.visibility }}</td>
+        <td><a href="#">Edit</a> <a href="/accounts/profile/transcription/?project={{ item.1.id }}">Transcript</a></td>
     </tr>
     {% empty %}
     <tr>

@@ -3,10 +3,12 @@
 from django.shortcuts import render_to_response
 from docView.form_transcriptr import TranscriptrForm, ProjectForm
 from django.http import HttpResponseRedirect
-from docView.models import Transcriptions, Project, Page
+from docView.models import Transcription, Project, Page
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_exempt
+
 import itertools
 import Image
 
@@ -75,16 +77,17 @@ def projects(request):
     project_list = Project.objects.filter(user=user)
 
     for project in project_list:
-        page_list.append(Page.objects.filter(project=project.id))
+        page_list.append(Page.objects.filter(project=project.id)[:1])
         #page_list.append(project)
+    print 'The Page List', page_list
     #now make a non nested list from page_list
     flatted_list = [item for sub_list in page_list for item in sub_list]
-    print 'The flatted list is:', flatted_list
+    #print 'The flatted list is:', flatted_list
     #Now combine the two lists
     #iters = [iter(flatted_list), iter(project_list)]
     #result_list =  list(it.next() for it in itertools.cycle(iters))
     result_list = zip(flatted_list, project_list)
-    print 'The result list:', result_list
+    #print 'The result list:', result_list
     return render_to_response('accounts/profile/project_overview.html', 
             {'user': theuser, 'result_list': result_list})
 
@@ -104,23 +107,47 @@ def create_project(request):
                     project_description=project_description,
                     visibility=visibility)
             project.save()
-            page = request.FILES['doc_1']
-            print 'THE REQUEST PAGE', page
+            #pages = request.FILES.getlist('thedoc')
+            #print 'THE PAGES:', pages
             print 'Project saved to db...'
-            doc_1 = Page(page=page, date_created=date_created,
-                    project=project)
-            doc_1.save()
+            #for page in pages:
+                #print 'THE PAGE IS', page
+                #doc_1 = Page(page=page, date_created=date_created,
+                        #project=project)
+                #doc_1.save()
             print 'Doc saved to db...'
+            #the_list = request.FILES.getlist['myfiles']
+            #for tem in request.FILES.getlist['myfiles']:
+                #print 'The file is:', item
             #create_thumb_from_page(page)
             #doc_2 = request.FILES['doc2']
             #print 'THE DOCS:', doc_1
             #project_list = Project.objects.filter(user=user)
-            return HttpResponseRedirect("/accounts/profile/")
+            return HttpResponseRedirect("/accounts/profile/upload/?project="+str(project.id))
     else:
         print 'testcall2'
         form = ProjectForm()
         print 'testcall3'
     return render_to_response("accounts/profile/create_project.html", {'form': form})
+
+@login_required
+def upload_docs(request):
+    if request.method == 'POST':
+        projectid = request.GET.get('project')
+        file_list = []
+        file_list = request.FILES.getlist('myfiles')
+        #Get the project 
+        project = Project.objects.get(id=projectid)
+        for item in file_list:
+            print file_list
+            print 'Save the doc to DB'
+            doc = Page(page=item, project=project, date_created=datetime.now())
+            print 'The doc is', doc
+            doc.save()
+        return HttpResponseRedirect("/accounts/profile/")
+    return render_to_response("accounts/profile/test.html")
+
+
 """
 def create_thumb_from_page(Page):
     size = 160,160
@@ -129,4 +156,33 @@ def create_thumb_from_page(Page):
     im.thumbnail(size, Image.ANTIALIAS)
     im.save('/Users/carlbednorz/Pictures/Placeholders/The_Image' + ".thumbnail", "JPEG")
 """
+
+@login_required
+def update_project(request):
+    pass
+
+@login_required
+def transcript_project(request):
+    print 'THE GET REQUEST', request.GET.get('project')
+    project_id = request.GET.get('project')
+    pages = []
+    pages += Page.objects.filter(project=project_id)
+    print 'THe pages are', pages
+    if request.method == 'POST':
+        form = TranscriptrForm(request.POST)
+        if form.is_valid():
+            content = request.POST.get('content')
+            #Get the project id
+            project_id = request.GET.get('project')
+            #Get the page of the Project
+            page = Page.objects.get(project=project_id)
+            print 'The page is', page
+            transcription = Transcription(content=content,date_created=datetime.now(),page=page)
+            print 'The transcription:', transcription
+            transcription.save()
+            print 'TRANSCRIPTION IS:', transcription
+            return HttpResponseRedirect("/accounts/profile/")
+    else:
+        form = TranscriptrForm()
+    return render_to_response("accounts/profile/transcript.html", {'form': form, 'pages': pages})
 
