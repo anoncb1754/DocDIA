@@ -1,24 +1,74 @@
-
 {% extends "base.html" %}
-
+{% load thumbnail %}
 {% block content %}
 <h1>Create PROJECT</h1>
 <p> Hello {{ user }}, Transcript it here:</p>
 {% if form.errors %}
 <p>Please correct the error {{form.errors|pluralize }} below.</p>
 {% endif %}
-<form action=""  method="POST">
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit Transcription">
-  </form>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <h4>Document Preview</h4>
+        <a href="{% url docView.views.transcript_project %}?project={{project.id}}" >Test</a>
+        <ul>
 
-<h2>The documents:</h2>
-<ul>
-  {% for item in pages %}
-  <li><img src ="{{MEDIA_ROOT}}/page_docs/{{item.page}}"></li>
-  {% endfor %}
-  </ul>
+          {% for item in pages %}
+          {% thumbnail item.page "100x100" crop="center" as im %}
+          <li><a href="{% url docView.views.transcript_project %}?project={{ project.id }}&index={{ forloop.counter0 }}"><img class="img-polaroid" src ="{{MEDIA_ROOT}}/page_docs/{{im.url}}"></a></li>
+          {% endthumbnail %}
+          {% endfor %}
+        </ul>
+     
+    </div><!--END sidebar-->
+    <div class="span7">
+      <h4>Current Document: {{ display_page.page }}</h4>
+      <div class="row-fluid">
+        <div class="row-fluid">
+          <ul class="transcriptr-nav">
+            <li>
+              <a class="btn" href="#"><i class="icon-zoom-in"></i></a>
+            </li>
+            <li>
+              <a class="btn" href="#"><i class="icon-zoom-out"></i></a>
+            </li>
+            <li>
+              <a class="btn" href="#">1:1</i></a>
+            </li>
+            <li>
+              <a class="btn" href="{% url docView.views.transcript_project %}?project={{ project.id }}&index={{ prev_page }}"><i class="icon-arrow-left"></i></a>
+            </li>
+            <li>
+              <a class="btn" href="{% url docView.views.transcript_project %}?project={{ project.id }}&index={{ next_page }}"><i class="icon-arrow-right"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <div class="row-fluid">
+          <p>HEre's the image</p>
+          <img src ="{{MEDIA_ROOT}}/page_docs/{{display_page}}"/>
+      </div>
+      </div>
+    </div>
+    <div class="span3" style="border: 1px solid #eee;">
+      <h4>Enter Transcription</h4>
+      <form action=""  method="POST">
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" class="btn" value="Submit Transcription">
+      </form>
+    </div>
+  </div><!--END row-fluid-->
+</div><!--END container-fluid"-->
+
+
+
+
+
+  
+  
+
 {% endblock %}
 

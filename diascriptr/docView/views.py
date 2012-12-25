@@ -1,4 +1,4 @@
-# Create your views here.
+# Create your views here
 #from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from docView.form_transcriptr import TranscriptrForm, ProjectForm
@@ -141,11 +141,14 @@ def upload_docs(request):
         for item in file_list:
             print file_list
             print 'Save the doc to DB'
+            image = Image.open(item)
+            image.thumbnail((800,400), Image.ANTIALIAS)
+            print 'THE IMAGE IS:', image
             doc = Page(page=item, project=project, date_created=datetime.now())
             print 'The doc is', doc
             doc.save()
         return HttpResponseRedirect("/accounts/profile/")
-    return render_to_response("accounts/profile/test.html")
+    return render_to_response("accounts/profile/upload.html")
 
 
 """
@@ -161,13 +164,48 @@ def create_thumb_from_page(Page):
 def update_project(request):
     pass
 
+
+def getNavPages(Pages):
+    nav_pages = []
+    for item in Pages:
+        print 'PAGE IDS', item.id
+        nav_pages.append(item.id)
+    return nav_pages
+
+def setNavImages(index, max_index):
+    #max_index = max_index-1
+    if index < 0:
+        return max_index-1
+    if index >= max_index:
+        return 0
+    else:
+        return index
+
+
 @login_required
 def transcript_project(request):
-    print 'THE GET REQUEST', request.GET.get('project')
     project_id = request.GET.get('project')
+    page_id = int(request.GET.get('index'))
+    
+    project = Project.objects.get(id=project_id)
     pages = []
     pages += Page.objects.filter(project=project_id)
     print 'THe pages are', pages
+    
+    pages_length = pages.__len__()
+
+    #display_page = Page.objects.get(id=page_id)
+    display_page = pages[setNavImages(page_id, pages_length)]
+    print 'DISPLAY PAGE', display_page
+
+    #nav_pages = getNavPages(pages)
+
+    #Use indexes of array 
+
+    next_page = setNavImages(page_id + 1, pages_length)
+    prev_page = setNavImages(page_id - 1, pages_length)
+    print 'THE DISPLAY PAGE', display_page
+
     if request.method == 'POST':
         form = TranscriptrForm(request.POST)
         if form.is_valid():
@@ -175,7 +213,7 @@ def transcript_project(request):
             #Get the project id
             project_id = request.GET.get('project')
             #Get the page of the Project
-            page = Page.objects.get(project=project_id)
+            page = pages[page_id]#Page.objects.get(id=page_id)
             print 'The page is', page
             transcription = Transcription(content=content,date_created=datetime.now(),page=page)
             print 'The transcription:', transcription
@@ -184,5 +222,7 @@ def transcript_project(request):
             return HttpResponseRedirect("/accounts/profile/")
     else:
         form = TranscriptrForm()
-    return render_to_response("accounts/profile/transcript.html", {'form': form, 'pages': pages})
+    return render_to_response("accounts/profile/transcript.html", 
+            {'form': form, 'pages': pages, 'display_page': display_page, 
+                'project': project, 'pages': pages, 'next_page': next_page, 'prev_page': prev_page })
 

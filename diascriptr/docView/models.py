@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
-
+import Image
 # Create your models here.
 """
 class User(models.Model):
@@ -34,6 +34,13 @@ class Page(models.Model):
     project = models.ForeignKey('Project')
     page = models.ImageField(upload_to=page_file_name)
     ##page_file_name)#'#page_docs/%Y/%m/%d')
+    
+    def save(self):
+        super(Page, self).save()
+        image = Image.open(self.page)
+        width, height = image.size
+        image.thumbnail((width/5, height/5),Image.ANTIALIAS)
+        image.save(self.page.path)
 
     def __unicode__(self):
         return str(self.page)

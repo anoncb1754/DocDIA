@@ -1,0 +1,8 @@
+/*The customized CSS Diascriptr*/
+
+
+ul.transcriptr-nav li
+{
+	list-style-type: none;
+	display: inline;
+}
