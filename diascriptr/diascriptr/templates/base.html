@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap | {% block title %}Untitled{% endblock %}</title>
+    <title>Diascriptr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -23,6 +23,23 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="{% static "js/jquery-1.8.3.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/image_to_canvas.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/kinetic-v4.2.0.js" %}" type="text/javascript"></script>
+    <script src="{% static "zoom_assets/jquery-1.7.1.min.js" %}"></script>
+    <script src="{% static "zoom_assets/jquery.smoothZoom.min.js" %}"></script>
+    <script>
+      jQuery(function($){
+        $('#the_doc').smoothZoom({
+          width: 750,
+          height: 800,
+          zoom_BUTTONS_SHOW: 'NO',
+          pan_BUTTONS_SHOW: 'NO',
+          pan_LIMIT_BOUNDARY: 'NO',
+          
+        });
+      });
+    </script>
+
     {% block extrahead %}
     {% endblock %}
     <script type="text/javascript">
@@ -43,7 +60,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">Bootstrap</a>
+          <a class="brand" href="/">Diascriptr</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>

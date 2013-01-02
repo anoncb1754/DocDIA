@@ -25,16 +25,18 @@
       <h4>Current Document: {{ display_page.page }}</h4>
       <div class="row-fluid">
         <div class="row-fluid">
-          <ul class="transcriptr-nav">
+          <ul class="transcriptr-nav-left">
             <li>
-              <a class="btn" href="#"><i class="icon-zoom-in"></i></a>
+              <a class="btn" onmousedown="$('#the_doc').smoothZoom('zoomIn');"><i class="icon-zoom-in"></i></a>
             </li>
             <li>
-              <a class="btn" href="#"><i class="icon-zoom-out"></i></a>
+              <a class="btn" onmousedown="$('#the_doc').smoothZoom('zoomOut');"><i class="icon-zoom-out"></i></a>
             </li>
             <li>
-              <a class="btn" href="#">1:1</i></a>
+              <a class="btn" onmousedown="$('#the_doc').smoothZoom('Reset');">1:1</i></a>
             </li>
+          </ul>
+          <ul class="transcriptr-nav-right">
             <li>
               <a class="btn" href="{% url docView.views.transcript_project %}?project={{ project.id }}&index={{ prev_page }}"><i class="icon-arrow-left"></i></a>
             </li>
@@ -47,7 +49,42 @@
       <div class="row-fluid">
         <div class="row-fluid">
           <p>HEre's the image</p>
-          <img src ="{{MEDIA_ROOT}}/page_docs/{{display_page}}"/>
+          <!--<canvas id="display_page" width="800" height="600">
+
+          </canvas>-->
+          
+          <!--
+          <script>
+            var src = "{{MEDIA_ROOT}}/page_docs/{{display_page}}";
+            dragIt();
+            //putImageToCanvas(src);
+            //check(src);
+          </script>
+          -->
+
+          <!--<script type="text/javascript">
+            
+            var x = 0;
+            var y = 0;
+            //var width = 600;
+            //var height = 600;
+            var imageObj = new Image();
+            imageObj.src = "{{MEDIA_ROOT}}/page_docs/{{display_page}}";
+              
+            imageObj.onload = function() {
+              var canvas = document.getElementById("display_page");
+              var context = canvas.getContext('2d');
+              var width = imageObj.width;
+              console.log("Sizes");
+              console.log(width);
+              var height = imageObj.height;
+              console.log(height);
+              context.drawImage(imageObj, x, y, imageObj.width, imageObj.height);
+              console.log("in canvas");
+            };
+            
+          </script>-->
+          <img id="the_doc" src ="{{MEDIA_ROOT}}/page_docs/{{display_page}}"/>
       </div>
       </div>
     </div>

@@ -1,8 +1,43 @@
 /*The customized CSS Diascriptr*/
 
 
-ul.transcriptr-nav li
+ul.transcriptr-nav-left
+{
+	float: left;
+}
+
+ul.transcriptr-nav-left li
 {
 	list-style-type: none;
 	display: inline;
+
 }
+
+ul.transcriptr-nav-right
+{
+	float: right;
+}
+
+ul.transcriptr-nav-right li
+{
+	list-style-type: none;
+	display: inline;
+
+}
+
+
+canvas#display_page
+{
+	width: 800px;
+	height: 1000px; 
+	
+	background: grey;
+}
+
+.smooth_zoom_preloader {
+		background-image: url(zoom_assets/preloader.gif);
+	}	
+
+.smooth_zoom_icons {
+		background-image: url(zoom_assets/icons.png);
+	}
